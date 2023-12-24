@@ -1,0 +1,30 @@
+.item-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns with equal width */
+    gap: 20px; /* Adjust the gap between items */
+}
+
+.home-item-container {
+    /* display: flex; */
+    /* align-items: center; */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 4 columns with equal width */
+    gap: 20px; 
+    background-color: rgb(229, 219, 238);
+  }
+  
+/* .home-item {
+    background-color: rgb(155, 215, 255);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+} */
+
+.main-container {
+    background-color: rgb(155, 215, 255);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

@@ -39,8 +39,11 @@ export default function App() {
             </div>
           </div>
 
-          <div className='row'>
-            <div className='column left'>
+          <div>
+            <div className='top'>
+              <RouterView />
+            </div>
+            <div className='bottom'>
             <Routes>
               {/* <Route path="/" element={<Login />}   /> */}
               <Route path="/home" element={<Home  />} />
@@ -50,9 +53,6 @@ export default function App() {
               <Route path="/add-product" element={<AddProduct   />} />
               <Route path="/overview" element={<Overview  />} />
             </Routes>
-            </div>
-            <div className='column right'>
-              <RouterView />
             </div>
           </div>
           

@@ -1,29 +1,39 @@
-* {
-    box-sizing: border-box;
-  }
+.top {
+ /* background-color: rgb(157, 157, 200); */
+}
 
-/* Create three equal columns that floats next to each other */
-.column {
-    float: left;
-    padding: 10px;
-    height: 100%; 
-    /* Should be removed. Only for demonstration */
-  }
-  
-  /* Clear floats after the columns */
-  .row:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
+.bottom {
+  /* background-color: rgb(255, 255, 255); */
+}
 
-  .left {
-    background-color: aqua;
-    width: 75%;
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .right {
-    background-color: rgb(120, 120, 210);
-    width: 25%;
-  }
+.logo img {
+  max-height: 50px; /* Adjust the max-height as needed */
+}
+
+.logout-btn {
+  position: relative;
+  top: 0;
+  right: 0;
+}
+
+.logout-btn button {
+  padding: 10px;
+  background-color: #618DFF;
+  border-radius: 5px;
+  color: white;
+  box-sizing: border-box; /* Include padding and border in the total width */
+  margin-bottom: 10px; /* Add some spacing between elements */
+  font-size: 20px;
+}
+
+.logout-btn button:hover {
+  background-color: #a2b4e2;
+  color: black;
+}
 
