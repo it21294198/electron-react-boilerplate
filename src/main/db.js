@@ -18,6 +18,7 @@ function initDatabase() {
 
 ipcMain.on('test', () => {
     console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+    console.error('$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
   });
 
 function createTable() {

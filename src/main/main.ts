@@ -35,6 +35,20 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
+ipcMain.on('test', async (event,arg) => {
+  console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+  db.all('SELECT * FROM users', [], (err: { message: any; }, rows: any) => {
+    if (err) {
+      console.error('Error selecting data:', err.message);
+    } else {
+      console.log('Selected data:', rows);
+      event.reply('test', rows);
+    }
+  });
+  // event.reply('test', '$$$$$$$$$$$$$$$$$$$$$$$$$$');
+  console.error('$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+});
+
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
