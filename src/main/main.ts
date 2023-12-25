@@ -15,6 +15,16 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
+const sqlite3 = require('sqlite3').verbose();
+
+const db = new sqlite3.Database('./database.db', (err: { message: any; }) => {
+  if (err) {
+    console.error('Database connection error:', err.message);
+  } else {
+    console.log('Connected to the database');
+  }
+});
+
 class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -29,6 +39,19 @@ ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+  console.log('###############################');
+  
+  console.log(db);
+
+  // Example of reading data (SELECT)
+db.all('SELECT * FROM users', [], (err: { message: any; }, rows: any) => {
+  if (err) {
+    console.error('Error selecting data:', err.message);
+  } else {
+    console.log('Selected data:', rows);
+  }
+});
+  
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -135,3 +158,5 @@ app
     });
   })
   .catch(console.log);
+
+  export default db;
