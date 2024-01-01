@@ -1,25 +1,64 @@
+// import React, { useState, useEffect } from 'react';
+// import { MyComponent, AppStateProvider } from "../context/MyComponent";
+
+// function Overview() {
+//   const [imageName, setImageName] = useState('image');
+//   const [image, setImage] = useState(null);
+
+//   useEffect(() => {
+//     const loadImage = async () => {
+//       try {
+//         const dynamicImage = await import(`../../main/uploads/${imageName}.png`);
+//         setImage(dynamicImage.default);
+//       } catch (error) {
+//         console.error('Error loading image:', error);
+//       }
+//     };
+
+//     loadImage();
+//   }, [imageName]);
+
+//   const change = () => {
+//     setImageName('image2');
+//   };
+
+//   return (
+//     <div>
+//       {/* Uncomment the following lines if needed */}
+//       {/* <AppStateProvider>
+//         <MyComponent />
+//       </AppStateProvider> */}
+//       {image && <img src={image} alt={imageName} />}
+//       <button onClick={change}>Change</button>
+//     </div>
+//   );
+// }
+
+// export default Overview;
+
 import React, { useState, useEffect } from 'react';
 import { MyComponent, AppStateProvider } from "../context/MyComponent";
 
 function Overview() {
-  const [imageName, setImageName] = useState('image');
-  const [image, setImage] = useState(null);
+  const [imageIndex, setImageIndex] = useState(0);
+  const [currentImage, setCurrentImage] = useState(null);
 
   useEffect(() => {
     const loadImage = async () => {
       try {
-        const dynamicImage = await import(`../../main/uploads/${imageName}.png`);
-        setImage(dynamicImage.default);
+        const dynamicImage = await import(`../../main/uploads/image${imageIndex}.png`);
+        setCurrentImage(dynamicImage.default);
       } catch (error) {
         console.error('Error loading image:', error);
+        setCurrentImage(null); // Set current image to null if there's an error
       }
     };
 
     loadImage();
-  }, [imageName]);
+  }, [imageIndex]);
 
-  const change = () => {
-    setImageName('image2');
+  const changeImage = () => {
+    setImageIndex((prevIndex) => (prevIndex + 1) % 5); // Cycle through images 0 to 4
   };
 
   return (
@@ -28,8 +67,12 @@ function Overview() {
       {/* <AppStateProvider>
         <MyComponent />
       </AppStateProvider> */}
-      {image && <img src={image} alt={imageName} />}
-      <button onClick={change}>Change</button>
+      {currentImage !== null ? (
+        <img src={currentImage} alt={`image${imageIndex}`} />
+      ) : (
+        <p>No image found or uploads folder does not exist</p>
+      )}
+      <button onClick={changeImage}>Change Image</button>
     </div>
   );
 }
