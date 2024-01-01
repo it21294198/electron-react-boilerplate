@@ -70,61 +70,34 @@ ipcMain.on('read-file', async (event, arg) => {
   }
 });
 
-// ipcMain.on('read-file', async (event, arg) => {
-//   const result = dialog.showOpenDialog({
-//     properties: ["openFile"],
-//     filters: [{ name: "All Files", extensions: ["*"] }]
-//   });
+ipcMain.on('deleteFile', (event, fileNumber) => {
+  const filePath = path.join(__dirname, '..', 'main', 'uploads', `image${fileNumber}.png`);
 
-//   result.then(async ({ canceled, filePaths }) => {
-//     if (!canceled && filePaths && filePaths.length > 0) {
-//       const filePath = filePaths[0];
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error('Error deleting file:', err);
+      event.reply('deleteFileResponse', { success: false, error: err.message });
+    } else {
+      console.log('File deleted successfully');
+      event.reply('deleteFileResponse', { success: true });
+    }
+  });
+});
 
-//       try {
-//         const imageBuffer = await fsPromises.readFile(filePath);
-//         const imageBase64 = imageBuffer.toString('base64');
-//         event.reply('read-file-response', { content: imageBase64 });
-//       } catch (error) {
-//         event.reply('read-file-error', `Error reading file: ${error.message}`);
-//       }
-//     } else {
-//       event.reply('read-file-error', 'No file selected or dialog canceled');
-//     }
-//   });
-// });
+ipcMain.on('getFilesCount', (event) => {
+  const absoluteFolderPath = path.join(__dirname, '..', 'main', 'uploads');
 
-// ipcMain.on('read-file', async (event, filePath) => {
-//   try {
-//     const imageBuffer = await fsPromises.readFile(filePath);
-//     const imageBase64 = imageBuffer.toString('base64');
-//     event.reply('read-file-response', { content: imageBase64 });
-//   } catch (error) {
-//     event.reply('read-file-error', 'Error reading file');
-//   }
-// });
-
-// ipcMain.on('read-file', async (event, filePath) => {
-//   try {
-//     const content = await fsPromises.readFile(filePath, 'utf-8');
-//     console.log(content)
-//     event.reply('read-file-response', { content });
-//   } catch (error) {
-//     event.reply('read-file-error', 'Error reading file');
-//   }
-// });
-
-// ipcMain.on('read-file', (event,{ fileName }) => {
-//   const uploadDir = path.join(__dirname, 'uploads');
-//   const filePath = path.join(uploadDir, fileName);
-//   fs.readFile(filePath, 'utf8', (readErr, fileData) => {
-//     if (readErr) {
-//       console.error('Error reading file:', readErr);
-//       event.sender.send('file-read-error', readErr.message);
-//     } else {
-//       event.sender.send('file-content', { fileName: path.basename(filePath), content: fileData });
-//     }
-//   });
-// });
+  fs.readdir(absoluteFolderPath, (err, files) => {
+    if (err) {
+      console.error('Error reading folder:', err);
+      event.reply('getFilesCountResponse', { success: false, error: err.message });
+    } else {
+      const fileCount = files.length;
+      console.log(`Number of files in ${absoluteFolderPath}: ${fileCount}`);
+      event.reply('getFilesCountResponse', { success: true, fileCount });
+    }
+  });
+});
 
 ipcMain.on('store-file', async (event,arg) => {
   console.log(arg)

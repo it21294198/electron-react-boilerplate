@@ -1,57 +1,41 @@
 import { useEffect, useState } from "react";
 
 function BillHistory() {
+  const [fileNumber, setFileNumber] = useState('');
+  const [deleteResponse, setDeleteResponse] = useState(null);
 
-  const [imageSrc, setImageSrc] = useState(null);
-  const [error, setError] = useState(null);
+  const deleteFile = () => {
+    if (!fileNumber) {
+      console.error('Please enter a file number.');
+      return;
+    }
 
-  const view = () => {
-    const handleFileResponse = (event, content) => {
-      console.log('Received data:',content );
-      // if (data && data.content) {
-      //   setImageSrc(`data:image/png;base64,${data.content}`);
-      //   setError(null);
-      // } else {
-      //   setError('Invalid data structure received');
-      // }
-    };
-    
-
-    const handleFileError = (event, errorMessage) => {
-      setError(errorMessage);
-      setImageSrc(null);
-    };
-
-    // Listen for the response or error from the main process
-    window.electron.ipcRenderer.on('read-file-response', handleFileResponse);
-    window.electron.ipcRenderer.once('read-file-error', handleFileError);
-
-    // Cleanup listeners when the component unmounts
-  }
-
-  const handleReadFile = () => {
-    // Send 'read-file' event to the main process
-    // window.electron.ipcRenderer.sendMessage('read-file', 'dummy-argument');
-    view()
-    console.log('ran')
+    window.electron.ipcRenderer.sendMessage('deleteFile', fileNumber);
   };
-    // useEffect(() => {
-    //     window.electron.ipcRenderer.sendMessage('test', ['ping']); 
-    //     window.electron.ipcRenderer.once('test', (arg) => {
-    //         console.log(arg);
-    //       });
-    // }, []);
 
+  window.electron.ipcRenderer.once('deleteFileResponse', (event, response) => {
+    setDeleteResponse(response);
+  });
     return (
         <div>
               <div>
-      <button onClick={handleReadFile}>Read File</button>
-
-      {/* Display the image if it exists */}
-      {imageSrc && <img src={imageSrc} alt="Read File" />}
-
-      {/* Display error message if any */}
-      {error && <p>Error: {error}</p>}
+      <h1>This will delete the images in uploads folder</h1>
+      <label>
+        Enter File Number:
+        <input
+          type="text"
+          value={fileNumber}
+          onChange={(e) => setFileNumber(e.target.value)}
+        />
+      </label>
+      <button onClick={deleteFile}>Delete File</button>
+      {deleteResponse && (
+        <p>
+          {deleteResponse.success
+            ? 'File deleted successfully'
+            : `Error deleting file: ${deleteResponse.error}`}
+        </p>
+      )}
     </div>
         </div>
       );

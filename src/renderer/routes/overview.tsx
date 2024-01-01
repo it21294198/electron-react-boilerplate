@@ -42,6 +42,7 @@ import { MyComponent, AppStateProvider } from "../context/MyComponent";
 function Overview() {
   const [imageIndex, setImageIndex] = useState(0);
   const [currentImage, setCurrentImage] = useState(null);
+  const [filesCount, setGetFilesCount] = useState(0);
 
   useEffect(() => {
     const loadImage = async () => {
@@ -54,11 +55,17 @@ function Overview() {
       }
     };
 
+    window.electron.ipcRenderer.sendMessage('getFilesCount')
+    window.electron.ipcRenderer.once('getFilesCountResponse',(e)=>{
+      console.log(e)
+      setGetFilesCount(e.fileCount)
+    })
+
     loadImage();
   }, [imageIndex]);
 
   const changeImage = () => {
-    setImageIndex((prevIndex) => (prevIndex + 1) % 5); // Cycle through images 0 to 4
+    setImageIndex((prevIndex) => (prevIndex + 1) % filesCount ); // Cycle through images 0 to 4
   };
 
   return (
@@ -68,7 +75,7 @@ function Overview() {
         <MyComponent />
       </AppStateProvider> */}
       {currentImage !== null ? (
-        <img src={currentImage} alt={`image${imageIndex}`} />
+        <img src={currentImage} alt={`image${imageIndex}`} width="100px" height="100px"/>
       ) : (
         <p>No image found or uploads folder does not exist</p>
       )}
