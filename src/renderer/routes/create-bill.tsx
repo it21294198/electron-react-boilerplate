@@ -1,18 +1,28 @@
-import { useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
 
 function CreateBill() {
-    useEffect(() => {
-        // window.electron.ipcRenderer.sendMessage('ipc-example', ['ping']); 
-        window.electron.ipcRenderer.sendMessage('test', ['ping']); 
-        window.electron.ipcRenderer.once('test', (arg) => {
-            // eslint-disable-next-line no-console
-            console.log(arg);
-          });
-    }, []);
-    return ( <div>
-        fsfsf
-    </div> );
+  const [users, setUsers] = useState<any>(null);
+
+  useEffect(() => {
+    window.electron.ipcRenderer.sendMessage('test', ['ping']); 
+    window.electron.ipcRenderer.once('test', (arg) => {
+      console.log(arg);
+      setUsers(arg);
+    });
+  }, []);
+
+  return ( 
+    <div>
+      {users && (
+        <ul>
+          {users.map((element, index) => (
+            // Use a unique key for each list item (e.g., index)
+            <li key={index}>{element.username}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 export default CreateBill;

@@ -9,21 +9,16 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import fs from 'fs'
+import { app, BrowserWindow, shell, ipcMain,dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-const sqlite3 = require('sqlite3').verbose();
-
-const db = new sqlite3.Database('./database.db', (err: { message: any; }) => {
-  if (err) {
-    console.error('Database connection error:', err.message);
-  } else {
-    console.log('Connected to the database');
-  }
-});
+// Getting Database functions from class
+import Database from './db';
+const db = new Database('./database.db');
 
 class AppUpdater {
   constructor() {
@@ -36,17 +31,104 @@ class AppUpdater {
 let mainWindow: BrowserWindow | null = null;
 
 ipcMain.on('test', async (event,arg) => {
-  console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-  db.all('SELECT * FROM users', [], (err: { message: any; }, rows: any) => {
+  console.log('Get all users')
+  db.getAllUsers((rows: any) => {
+    event.reply('test', rows);
+  });
+});
+
+ipcMain.on('save-file', (event, { fileName, content }) => {
+  const uploadDir = path.join(__dirname, 'uploads');
+  const filePath = path.join(uploadDir, fileName);
+
+  // Check if the 'uploads' directory exists, create it if not
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+  }
+
+  fs.writeFile(filePath, Buffer.from(content), (err) => {
     if (err) {
-      console.error('Error selecting data:', err.message);
+      console.error('Error writing file:', err);
     } else {
-      console.log('Selected data:', rows);
-      event.reply('test', rows);
+      console.log('######### File saved successfully:', filePath);
     }
   });
-  // event.reply('test', '$$$$$$$$$$$$$$$$$$$$$$$$$$');
-  console.error('$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+});
+
+import fsPromises from 'fs/promises';
+
+ipcMain.on('read-file', async (event, arg) => {
+  const filePath = '/Users/rusira/Documents/codes/Electron/your-project-name/src/main/uploads/image.png';
+  try {
+    const imageBuffer = await fsPromises.readFile(filePath);
+    const imageBase64 = imageBuffer.toString('base64');
+    console.log(imageBase64)
+    event.reply('read-file-response', { content: imageBase64 });
+  } catch (error) {
+    console.error('Error reading file:', error);
+    event.reply('read-file-error', `Error reading file: ${error.message}`);
+  }
+});
+
+// ipcMain.on('read-file', async (event, arg) => {
+//   const result = dialog.showOpenDialog({
+//     properties: ["openFile"],
+//     filters: [{ name: "All Files", extensions: ["*"] }]
+//   });
+
+//   result.then(async ({ canceled, filePaths }) => {
+//     if (!canceled && filePaths && filePaths.length > 0) {
+//       const filePath = filePaths[0];
+
+//       try {
+//         const imageBuffer = await fsPromises.readFile(filePath);
+//         const imageBase64 = imageBuffer.toString('base64');
+//         event.reply('read-file-response', { content: imageBase64 });
+//       } catch (error) {
+//         event.reply('read-file-error', `Error reading file: ${error.message}`);
+//       }
+//     } else {
+//       event.reply('read-file-error', 'No file selected or dialog canceled');
+//     }
+//   });
+// });
+
+// ipcMain.on('read-file', async (event, filePath) => {
+//   try {
+//     const imageBuffer = await fsPromises.readFile(filePath);
+//     const imageBase64 = imageBuffer.toString('base64');
+//     event.reply('read-file-response', { content: imageBase64 });
+//   } catch (error) {
+//     event.reply('read-file-error', 'Error reading file');
+//   }
+// });
+
+// ipcMain.on('read-file', async (event, filePath) => {
+//   try {
+//     const content = await fsPromises.readFile(filePath, 'utf-8');
+//     console.log(content)
+//     event.reply('read-file-response', { content });
+//   } catch (error) {
+//     event.reply('read-file-error', 'Error reading file');
+//   }
+// });
+
+// ipcMain.on('read-file', (event,{ fileName }) => {
+//   const uploadDir = path.join(__dirname, 'uploads');
+//   const filePath = path.join(uploadDir, fileName);
+//   fs.readFile(filePath, 'utf8', (readErr, fileData) => {
+//     if (readErr) {
+//       console.error('Error reading file:', readErr);
+//       event.sender.send('file-read-error', readErr.message);
+//     } else {
+//       event.sender.send('file-content', { fileName: path.basename(filePath), content: fileData });
+//     }
+//   });
+// });
+
+ipcMain.on('store-file', async (event,arg) => {
+  console.log(arg)
+  fs.writeFileSync('/Users/rusira/Documents/codes/Electron/your-project-name/file.txt','hello test')
 });
 
 ipcMain.on('ipc-example', async (event, arg) => {
@@ -54,18 +136,7 @@ ipcMain.on('ipc-example', async (event, arg) => {
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
   console.log('###############################');
-  
   console.log(db);
-
-  // Example of reading data (SELECT)
-db.all('SELECT * FROM users', [], (err: { message: any; }, rows: any) => {
-  if (err) {
-    console.error('Error selecting data:', err.message);
-  } else {
-    console.log('Selected data:', rows);
-  }
-});
-  
 });
 
 if (process.env.NODE_ENV === 'production') {

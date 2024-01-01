@@ -17,7 +17,11 @@ Start the app in the `dev` environment:
 ```bash
 npm start
 ```
-
+### Installed packages
+```
+npm i sqlite3
+npm i react-dropzone
+```
 ### Packaging for Production
 
 To package apps for the local platform:
