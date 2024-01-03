@@ -30,8 +30,20 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
+ipcMain.handle('getauser', async (event, arg) => {
+  try {
+    const result = await db.getAUser(arg);
+    return result
+  } catch (error) {
+    console.error('Error handling get-a-user:', error.message);
+    // You might want to handle the error in an appropriate way
+    return null;
+  }
+});
+
 ipcMain.on('test', async (event,arg) => {
   console.log('Get all users')
+  console.log(arg)
   db.getAllUsers((rows: any) => {
     event.reply('test', rows);
   });

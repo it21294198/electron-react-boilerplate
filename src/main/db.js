@@ -104,6 +104,21 @@ class Database {
     });
   }
 
+  getAUser(userId) {
+    return new Promise((resolve, reject) => {
+      const query = `SELECT * FROM users WHERE id=${userId}`;
+      this.db.all(query, [], (err, rows) => {
+        if (err) {
+          console.error('Error selecting data:', err.message);
+          reject(err);
+        } else {
+          console.log('Selected data:', rows);
+          resolve(rows);
+        }
+      });
+    });
+  }  
+
   close() {
     this.db.close((err) => {
       if (err) {
