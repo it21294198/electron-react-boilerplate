@@ -16,10 +16,6 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-// Getting Database functions from class
-import Database from './db';
-const db = new Database('./database.db');
-
 class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -32,10 +28,9 @@ let mainWindow: BrowserWindow | null = null;
 
 ipcMain.handle('getauser', async (event, arg) => {
   try {
-    const result = await db.getAUser(arg);
-    return result
+    return 'fhkfsdjzzzz'
   } catch (error) {
-    console.error('Error handling get-a-user:', error.message);
+    // console.error('Error handling get-a-user:', error.message);
     // You might want to handle the error in an appropriate way
     return null;
   }
@@ -44,9 +39,7 @@ ipcMain.handle('getauser', async (event, arg) => {
 ipcMain.on('test', async (event,arg) => {
   console.log('Get all users')
   console.log(arg)
-  db.getAllUsers((rows: any) => {
-    event.reply('test', rows);
-  });
+  event.reply('test', 'row');
 });
 
 ipcMain.on('save-file', (event, { fileName, content }) => {
@@ -78,7 +71,7 @@ ipcMain.on('read-file', async (event, arg) => {
     event.reply('read-file-response', { content: imageBase64 });
   } catch (error) {
     console.error('Error reading file:', error);
-    event.reply('read-file-error', `Error reading file: ${error.message}`);
+    // event.reply('read-file-error', `Error reading file: ${error.message}`);
   }
 });
 
@@ -121,7 +114,6 @@ ipcMain.on('ipc-example', async (event, arg) => {
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
   console.log('###############################');
-  console.log(db);
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -229,4 +221,4 @@ app
   })
   .catch(console.log);
 
-  export default db;
+  // export default db;

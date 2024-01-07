@@ -1,0 +1,111 @@
+/*! Add items dialog box */
+.dialog-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .dialog-form label {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  
+  .dialog-form input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  .dialog-form button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .dialog-form button.cancel {
+    background-color: #f44336;
+    margin-top: 10px;
+  }
+  
+  dialog {
+    width: 400px; /* Adjust the width as needed */
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  dialog[open]::backdrop {
+    backdrop-filter: blur(5px);
+  }
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    transition: background-color 0.3s ease; /* Add transition for background-color */
+  }
+  
+  .table th {
+    background-color: #f2f2f2;
+  }
+  
+  .table tr:hover {
+    background-color: #e6f7ff; /* Background color on hover */
+  }
+  
+/*! Styles for search panal */
+.home-panal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.input-container {
+  display: flex;
+  align-items: center; /* Center the input vertically */
+}
+
+.search-input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.add-item-button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-item-button:hover {
+  background-color: #2bbad7; /* Darker color on hover */
+}

@@ -1,10 +1,8 @@
-.top {
- /* background-color: rgb(157, 157, 200); */
-}
-
-.bottom {
-  /* background-color: rgb(255, 255, 255); */
-}
+@import "./styles/loading.css"; /* Using a string */
+@import "./styles/bill.css"; /* Using a string */
+@import "./styles/home.css"; /* Using a string */
+@import "./styles/reminder.css"; /* Using a string */
+@import "./styles/help.css"; /* Using a string */
 
 .header {
   display: flex;
