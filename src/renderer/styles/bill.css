@@ -1,0 +1,100 @@
+/* YourComponent.css */
+
+.reminder-input {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  
+  .add-item-button {
+    padding: 10px;
+    font-size: 14px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-item-button:hover {
+    background-color: #45a049;
+  }
+  
+  .search-results {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: absolute;
+    width: 75%;
+    background-color: #fff;
+    z-index: 1;
+  }
+  
+  .search-results li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd; /* Add a border between items */
+  }
+  
+  .search-results li:last-child {
+    border-bottom: none; /* Remove the border for the last item */
+  }
+  
+  .search-results li:hover {
+    background-color: #f2f2f2;
+  }
+  
+  .search-results li span {
+    margin-right: 10px; /* Add a gap between spans */
+  }
+
+  /* YourComponent.css */
+
+.bill-item-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.bill-item-table th, .bill-item-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.bill-item-table th {
+  background-color: #f2f2f2;
+}
+
+.bill-item-table tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+.total-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.total-label {
+  flex: 1;
+  font-weight: bold;
+}
+
+.total-amount {
+  margin-left: 10px;
+}

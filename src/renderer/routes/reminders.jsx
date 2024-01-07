@@ -101,11 +101,81 @@
 
 // export default Reminders;
 
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 
 export default function Reminders() {
+
+  const [remiderer, setRemiderer] = useState([])
+  const [newReminder, setNewReminder] = useState('');
+
+  useEffect(()=>{
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.toDateString()} ${currentDate.toLocaleTimeString()}`;
+
+    const remider = [
+      {
+      remiderId:1,
+      remiderTime:formattedDate,
+      remiderName:'test'
+      },
+      {
+        remiderId:2,
+        remiderTime:formattedDate,
+        remiderName:'test2'
+      }
+    ]
+    setRemiderer(remider)
+  },[])
+
+  const handleDelete = (e) => {
+    alert('Reminde is deleted')
+    console.log(e)
+  }
+
+  const handleAddReminder = () =>{
+    alert('Remider is add')
+  }
+
   return (
-    <div>Reminders</div>
+    <div className="reminder-container">
+    <div className="reminder-input">
+      <label>
+        <input
+          type="text"
+          name="itemDescription"
+          className='add-input-reminder'
+          placeholder='Add new Reminder'
+          value={newReminder}
+          onChange={(e) => setNewReminder(e.target.value)}
+        />
+      </label>
+      <button className='add-item-button' onClick={handleAddReminder}>Add Reminder</button>
+    </div>
+    <div>
+      <table className="reminder-table">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Date</th>
+            <th>Reminder</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {remiderer.map((remind) => (
+            <tr key={remind.remiderId}>
+              <td>{remind.remiderId}</td>
+              <td>{remind.remiderName}</td>
+              <td>{remind.remiderTime}</td>
+              <td>
+                <button className='delete-item-button' onClick={() => handleDelete(remind.remiderId)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
   )
 }
 

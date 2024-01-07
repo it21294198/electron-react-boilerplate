@@ -1,0 +1,51 @@
+.reminder-container {
+    padding: 20px;
+  }
+  
+  .reminder-input {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  
+  .reminder-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .reminder-table th,
+  .reminder-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .reminder-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .add-input-reminder {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    /* box-sizing: border-box; */
+    width: 100%;
+  }
+
+  .delete-item-button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #e74b4b;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .delete-item-button:hover {
+    background-color: #ff743d; /* Darker color on hover */
+  }
