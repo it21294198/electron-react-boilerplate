@@ -13,19 +13,25 @@ const EditItemDialog = ({ isOpen, onClose, item }) => {
   const [isLoading, setIsLoading] = useState(false); // Add loading state
 
   useEffect(() => {
-
-    const initialItems ={
+    setIsLoading(true);
+  
+    const intervalId = setInterval(() => {
+      const initialItems = {
         itemId: 1,
         itemName: 'item1',
-        itemDescription:'best',
+        itemDescription: 'best',
         itemPrice: 250,
         itemCount: 5,
-      }
+      };
+      setEditedItem(initialItems);
+      setIsLoading(false);
+      clearInterval(intervalId); // Stop the interval after the delay
+    }, 2000); // Set the delay time in milliseconds (e.g., 2000ms for 2 seconds)
+    console.log("Selected item for edit is : ",item)
+    // Clean up the interval when the component is unmounted
+    return () => clearInterval(intervalId);
+  }, [item]);
   
-    setEditedItem(initialItems)
-    console.log(item)
-
-  }, [])
   
 
   const handleChange = (e) => {
@@ -36,16 +42,17 @@ const EditItemDialog = ({ isOpen, onClose, item }) => {
     }));
   };
 
-  const handleSave = () => {
+  const handleUpdate = () => {
     setIsLoading(true)
-    const intervalId = setInterval(() => {
-      setIsLoading(false);
-      clearInterval(intervalId); // Stop the interval after the delay
-    }, 2000); 
-    // setIsLoading(false)
-    return () => clearInterval(intervalId);
+    setIsLoading(false)
     onClose()
   };
+
+  const handleDelete = () => {
+    setIsLoading(true)
+    setIsLoading(false)
+    onClose()
+  }
 
   return (
     <dialog open={isOpen}>
@@ -102,8 +109,11 @@ const EditItemDialog = ({ isOpen, onClose, item }) => {
             />
         </label>
 
-        <button type="button" onClick={handleSave}>
+        <button type="button" onClick={handleUpdate}>
           Update
+        </button>
+        <button type="button" onClick={handleDelete}>
+          Delete Item
         </button>
         <button type="button" onClick={onClose}>
           Cancel

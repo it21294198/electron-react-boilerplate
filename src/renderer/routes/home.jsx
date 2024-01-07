@@ -90,6 +90,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddItemDialogOpen, setAddItemDialogOpen] = useState(false);
   const [isEditItemDialogOpen, setEditItemDialogOpen] = useState(false);
+  const [editItemId, setEditItemId] = useState(null);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -107,7 +108,8 @@ export default function Home() {
     setEditItemDialogOpen(false)
   }
   
-  const openEditDialog = () => {
+  const openEditDialog = (e) => {
+    setEditItemId(e)
     setEditItemDialogOpen(true)
   }
 
@@ -117,7 +119,7 @@ export default function Home() {
     item.itemDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
     item.itemId.toString().includes(searchTerm)
   )
-  .map((item) => <HomeItem key={item.itemId} item={item} openEditDialog={openEditDialog} />);
+  .map((item) => <HomeItem key={item.itemId} item={item} openEditDialog={() => openEditDialog(item.itemId)} />);
 
   return (
     <div>
@@ -144,7 +146,7 @@ export default function Home() {
       <EditItemDialog
         isOpen={isEditItemDialogOpen}
         onClose={closeEditItemDialog}
-        item={1}
+        item={editItemId}
       />
 
       {/* show table if not loading */}
