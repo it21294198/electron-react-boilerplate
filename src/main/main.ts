@@ -1,13 +1,3 @@
-/* eslint global-require: off, no-console: off, promise/always-return: off */
-
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `npm run build` or `npm run build:main`, this file is compiled to
- * `./src/main.js` using webpack. This gives us some performance wins.
- */
 import path from 'path';
 import fs from 'fs'
 import { app, BrowserWindow, shell, ipcMain,dialog } from 'electron';
@@ -15,6 +5,12 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+
+import fsPromises from 'fs/promises';
+import DatabaseManager from './database/DatabaseManager';
+import setupIpcHandlers from './database/ipcDb';
+
+const databaseManager = new DatabaseManager(app);
 
 class AppUpdater {
   constructor() {
@@ -35,6 +31,8 @@ ipcMain.handle('getauser', async (event, arg) => {
     return null;
   }
 });
+
+setupIpcHandlers(ipcMain, databaseManager);
 
 ipcMain.on('test', async (event,arg) => {
   console.log('Get all users')
@@ -60,7 +58,6 @@ ipcMain.on('save-file', (event, { fileName, content }) => {
   });
 });
 
-import fsPromises from 'fs/promises';
 
 ipcMain.on('read-file', async (event, arg) => {
   const filePath = '/Users/rusira/Documents/codes/Electron/your-project-name/src/main/uploads/image.png';
