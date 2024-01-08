@@ -182,6 +182,29 @@ const renderSearchResults = () => {
     // setBillTotal(calculateTotal)
   };  
 
+  const removeItemFromBill = (itemId,e) => {
+    const updatedItems = billItemList.map((item) => {
+      if (item.itemId === itemId) {
+        // Check if the new item count is greater than 0
+        const newCount = parseInt(e.target.value, 10);
+        if (newCount > 0) {
+          return { ...item, itemCount: newCount };
+        } else {
+          // If the new count is 0 or negative, remove the item
+          return null;
+        }
+      } else {
+        return item;
+      }
+    });
+  
+    // Filter out null values (removed items)
+    const filteredItems = updatedItems.filter((item) => item !== null);
+  
+    setBillItemList(filteredItems);
+
+  }
+
   const billedItemList = () => {
   
     return (
@@ -194,6 +217,8 @@ const renderSearchResults = () => {
               <th>Item Description</th>
               <th>Price</th>
               <th>Count</th>
+              <th>Amount</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -203,12 +228,14 @@ const renderSearchResults = () => {
                 <td>{item.itemName}</td>
                 <td>{item.itemDescription}</td>
                 <td>
-                  <span>LKR <input type='number' onChange={(e) => handlePriceChange(item.itemId, e)} value={item.itemPrice} style={{ width: '75px' }} />
+                  <span>LKR <input min="0" type='number' onChange={(e) => handlePriceChange(item.itemId, e)} value={item.itemPrice} style={{ width: '75px' }} />
                   </span>
                 </td>
                 <td>
-                  <input type='number' onChange={(e) => handleCountChange(item.itemId, e)} value={item.itemCount} style={{ width: '50px' }} />
+                  <input min="0" type='number' onChange={(e) => handleCountChange(item.itemId, e)} value={item.itemCount} style={{ width: '50px' }} />
                 </td>
+                <td>LKR {item.itemCount*item.itemPrice}</td>
+                <td><button className="add-item-button" onClick={(e)=>{removeItemFromBill(item.itemId,e)}}>Remove</button></td>
               </tr>
             ))}
           </tbody>
@@ -259,7 +286,7 @@ const renderSearchResults = () => {
 
       <span className="total-container" >
       <span className="total-label" >
-        Total
+        Total Amount
       </span>
       <span className="total-amount">
         LKR {calculateTotal()}
